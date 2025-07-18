@@ -13,7 +13,7 @@ async function main() {
 
   try {
     console.log("Connecting to MongoDB...")
-    await mongoose.connect("mongodb://localhost:27017/flowbit-db", {
+    await mongoose.connect("mongodb://flowbit-mongo:27017/flowbit-db", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
