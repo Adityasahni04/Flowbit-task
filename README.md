@@ -16,7 +16,7 @@ A complete multi-tenant support ticket management system with **React frontend**
 
 ```bash
 git clone https://github.com/Adityasahni04/Flowbit-task
-cd flowbit-system
+cd Flowbit-task
 ```
 
 ### 📦 2. Install Dependencies
