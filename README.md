@@ -1,6 +1,7 @@
+
 # 🚀 Flowbit Multi-Tenant Support System
 
-A complete multi-tenant support ticket management system with **React frontend**, **Node.js backend**, and **n8n workflow integration**.
+A complete multi-tenant support ticket management system with **React frontend**, **Node.js backend**, and **n8n workflow automation**.
 
 ---
 
@@ -12,14 +13,18 @@ A complete multi-tenant support ticket management system with **React frontend**
 * Docker & Docker Compose
 * MongoDB (or use Docker for it)
 
-### 📥 1. Clone and Setup
+---
+
+## 📥 1. Clone and Setup
 
 ```bash
 git clone https://github.com/Adityasahni04/Flowbit-task
 cd Flowbit-task
-```
+````
 
-### 📦 2. Install Dependencies
+---
+
+## 📦 2. Install Dependencies
 
 ```bash
 # Backend
@@ -31,74 +36,72 @@ cd ../frontend
 npm install
 ```
 
-### 🐳 3. Start with Docker (Recommended)
+---
+
+## 🐳 3. Start with Docker (Recommended)
 
 ```bash
-# Start all services
 docker-compose up -d
-
-# View logs
-docker-compose logs -f
 ```
 
-### 🛠️ 4. Manual Setup (Alternative)
-
-```bash
-# Terminal 1: Start MongoDB
-mongod
-
-# Terminal 2: Start Backend
-cd backend
-npm run dev
-
-# Terminal 3: Start Frontend
-cd frontend
-npm run dev
-
-# Terminal 4: Start n8n
-npx n8n start
-```
+> 📝 Once the services are running, you can proceed to configure **n8n**.
 
 ---
 
-## 🔐 Demo Accounts
+## 🔁 4. Configure n8n Webhook
 
-| Tenant      | Email                                             | Password |
-| ----------- | ------------------------------------------------- | -------- |
-| LogisticsCo | [admin@logistics.com](mailto:admin@logistics.com) | 123      |
-| RetailGmbH  | [admin@retail.com](mailto:admin@retail.com)       | 123      |
+1. Open the n8n editor UI: [http://localhost:5678](http://localhost:5678)
+
+2. **Create a new workflow** with the following setup:
+
+   ### 🧩 Webhook Node:
+
+   * **HTTP Method:** `POST`
+   * **Path:** `ticket-trigger`
+   * **Authentication:** None
+   * **Respond:** Immediately
+
+   ### 🔗 HTTP Request Node:
+
+   * **Method:** `POST`
+   * **URL:** `http://backend:5000/webhook/ticket-done`
+   * **Headers:**
+
+     * `x-secret: flowbit123`
+   * **Body Content Type:** JSON
+   * **JSON Body:**
+
+     ```json
+     {
+        "ticketId": "{{ $json.body.ticketId }}",
+        "status": "done"
+     }
+     ```
+
+3. Connect the Webhook → HTTP Request, **activate the workflow**, and save.
 
 ---
+
 
 ## 📱 Features
 
 * ✅ Multi-tenant authentication with JWT
 * ✅ Tenant data isolation
-* ✅ Dynamic tenant-specific navigation
-* ✅ Real-time ticket status updates
-* ✅ Seamless n8n workflow integration
-* ✅ Responsive React frontend
+* ✅ Real-time ticket status updates via n8n
+* ✅ Seamless webhook handling
 * ✅ Full Docker containerization
-
----
-
-## 📡 API Endpoints
-
-* `POST /auth/login` – Authenticate user
-* `GET /tickets` – Get tenant-specific tickets
-* `POST /tickets` – Create a new support ticket
-* `GET /me/screens` – Fetch navigation screens
-* `POST /webhook/ticket-done` – Receive ticket update from n8n
+* ✅ Responsive React frontend
 
 ---
 
 ## 🧪 Testing the Flow
 
-1. Open [http://localhost:3000](http://localhost:3000)
+1. Visit [http://localhost:3000](http://localhost:3000)
 2. Log in as `admin@logistics.com` / `123`
 3. Create a new ticket
-4. Watch status auto-update from **open** to **done** (via n8n)
-5. Log in as `admin@retail.com` to confirm complete tenant isolation
+4. Ticket is sent to `http://localhost:5678/webhook/ticket-trigger`
+5. n8n workflow calls `http://backend:5000/webhook/ticket-done`
+6. Ticket status updates to **done** ✅
 
 ---
 
@@ -113,13 +116,8 @@ npx n8n start
 
 ---
 
-## 🛠️ Troubleshooting
+## 🧰 Troubleshooting
 
-* 🔍 View logs:
-  `docker-compose logs -f`
-
-* ♻️ Restart services:
-  `docker-compose restart`
-
-* 🧹 Clean rebuild:
-  `docker-compose down && docker-compose up --build`
+* 🔍 Logs: `docker-compose logs -f`
+* ♻️ Restart: `docker-compose restart`
+* 🧹 Clean rebuild: `docker-compose down && docker-compose up --build`
