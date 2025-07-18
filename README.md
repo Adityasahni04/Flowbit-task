@@ -24,21 +24,9 @@ cd Flowbit-task
 
 ---
 
-## 📦 2. Install Dependencies
-
-```bash
-# Backend
-cd backend
-npm install
-
-# Frontend
-cd ../frontend
-npm install
-```
-
 ---
 
-## 🐳 3. Start with Docker (Recommended)
+## 🐳 2. Start with Docker (Recommended)
 
 ```bash
 docker-compose up -d
@@ -48,7 +36,7 @@ docker-compose up -d
 
 ---
 
-## 🔁 4. Configure n8n Webhook
+## 🔁 3. Configure n8n Webhook
 
 1. Open the n8n editor UI: [http://localhost:5678](http://localhost:5678)
 
